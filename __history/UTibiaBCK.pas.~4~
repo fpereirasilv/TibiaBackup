@@ -1,0 +1,123 @@
+unit UTibiaBCK;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, ShellAPI;
+
+type
+  TFormMain = class(TForm)
+    BitBtn1: TBitBtn;
+    GroupBox1: TGroupBox;
+    EdtCharacterdata: TEdit;
+    EdtConf: TEdit;
+    EdtMinimap: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EdtScreenshots: TEdit;
+    CkbScreenShots: TCheckBox;
+    CkbCopiarTestServer: TCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure CkbScreenShotsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure TibiaBackup(Origem, Destino : String);
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+Function GetEnv(fn_Param: string): string;
+var
+  lpName  : array[0..19] of char;
+  lpBuffer: array[0..126] of char;
+begin
+  StrPCopy(lpName,fn_Param);
+  GetEnvironmentVariable(lpName,lpBuffer,SizeOf(lpBuffer));
+  Result := StrPas(lpBuffer);
+end;
+
+procedure TFormMain.BitBtn1Click(Sender: TObject);
+var dirCharacterdata, dirConf, dirMinimap, dirScreenshots : String;
+begin
+  if CkbCopiarTestServer.Checked = True then
+    begin
+      dirCharacterdata := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\TibiaExternal';
+      dirConf          := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\TibiaExternal';
+      dirMinimap       := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\TibiaExternal';
+      dirScreenshots   := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\TibiaExternal';
+    end else
+    begin
+      dirCharacterdata := GetEnv('USERPROFILE')+'\Desktop\TibiaBackup\characterdata';
+      dirConf          := GetEnv('USERPROFILE')+'\Desktop\TibiaBackup\conf';
+      dirMinimap       := GetEnv('USERPROFILE')+'\Desktop\TibiaBackup\minimap';
+      dirScreenshots   := GetEnv('USERPROFILE')+'\Desktop\TibiaBackup\screenshots';
+    end;
+
+
+
+  if not DirectoryExists(dirCharacterdata) and not DirectoryExists(dirConf) and not DirectoryExists(dirMinimap) and not DirectoryExists(dirScreenshots) then
+    begin
+      ForceDirectories(dirCharacterdata);
+      ForceDirectories(dirConf);
+      ForceDirectories(dirMinimap);
+      ForceDirectories(dirScreenshots);
+    end;
+
+
+    try
+        TibiaBackup(EdtCharacterdata.Text, dirCharacterdata);
+        TibiaBackup(EdtConf.Text         , dirConf);
+        TibiaBackup(EdtMinimap.Text      , dirMinimap);
+
+        if CkbScreenShots.Checked = True then
+          begin
+            TibiaBackup(EdtScreenshots.Text      , dirScreenshots);
+          end;
+
+        Sleep(5000);
+        ShowMessage('Backup Realizado com sucesso...!');
+    except
+      ShowMessage('Não foi possivel executar.');
+    end;
+
+end;
+
+procedure TFormMain.CkbScreenShotsClick(Sender: TObject);
+begin
+  ShowMessage('Ao marcar essa opção a demora no backup será mais que o normal, pois o tempo vai variar de acordo com o tamanho da sua pasta de screenshots.');
+  EdtScreenshots.Enabled := CkbScreenShots.Checked;
+end;
+
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  EdtCharacterdata.Text := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\Tibia\characterdata';
+  EdtConf         .Text := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\Tibia\conf';
+  EdtMinimap      .Text := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\Tibia\minimap';
+  EdtScreenshots  .Text := GetEnv('USERPROFILE')+'\AppData\Local\Tibia\packages\Tibia\screenshots';
+end;
+
+procedure TFormMain.TibiaBackup(Origem, Destino: String);
+var
+   Parametros: Pchar;
+begin
+  try
+    Parametros := Pchar('"' + Origem + '" "' + Destino + '" /S /Y');
+    ShellExecute(handle, '', 'xCopy', Parametros, '', SW_SHOW);
+  except
+    ShowMessage('Erro ao copiar os arquivos');
+  end;
+
+end;
+
+end.

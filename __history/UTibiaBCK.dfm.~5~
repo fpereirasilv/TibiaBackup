@@ -1,0 +1,111 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  Caption = 'Backup Configura'#231#245'es Tibia'
+  ClientHeight = 229
+  ClientWidth = 493
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object BitBtn1: TBitBtn
+    Left = 344
+    Top = 175
+    Width = 129
+    Height = 25
+    Caption = '&Gerar Backup'
+    Kind = bkRetry
+    NumGlyphs = 2
+    TabOrder = 0
+    OnClick = BitBtn1Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Top = 8
+    Width = 473
+    Height = 145
+    Caption = ' | Origem dos Arquivos |'
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 12
+      Top = 24
+      Width = 74
+      Height = 13
+      Caption = 'Characterdata:'
+    end
+    object Label2: TLabel
+      Left = 59
+      Top = 51
+      Width = 27
+      Height = 13
+      Caption = 'Conf:'
+    end
+    object Label3: TLabel
+      Left = 44
+      Top = 78
+      Width = 42
+      Height = 13
+      Caption = 'Minimap:'
+    end
+    object Label4: TLabel
+      Left = 23
+      Top = 105
+      Width = 63
+      Height = 13
+      Caption = 'Screenshots:'
+    end
+    object EdtCharacterdata: TEdit
+      Left = 88
+      Top = 24
+      Width = 377
+      Height = 21
+      TabOrder = 0
+    end
+    object EdtConf: TEdit
+      Left = 88
+      Top = 51
+      Width = 377
+      Height = 21
+      TabOrder = 1
+    end
+    object EdtMinimap: TEdit
+      Left = 88
+      Top = 78
+      Width = 377
+      Height = 21
+      TabOrder = 2
+    end
+    object EdtScreenshots: TEdit
+      Left = 88
+      Top = 105
+      Width = 354
+      Height = 21
+      Enabled = False
+      TabOrder = 3
+    end
+    object CkbScreenShots: TCheckBox
+      Left = 448
+      Top = 105
+      Width = 17
+      Height = 17
+      TabOrder = 4
+      OnClick = CkbScreenShotsClick
+    end
+  end
+  object CkbCopiarTestServer: TCheckBox
+    Left = 8
+    Top = 159
+    Width = 181
+    Height = 17
+    Caption = 'Copiar Config Para Test Server'
+    TabOrder = 2
+    OnClick = CkbCopiarTestServerClick
+  end
+end
